@@ -47,6 +47,7 @@ public:
     void transladarModel(float dx,float dy);
     void flipY();
     void destruirNave();
+    bool isFlipedY = false;
 };
 
 

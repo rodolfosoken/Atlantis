@@ -48,6 +48,7 @@ public:
     void transladarModel(float dx,float dy);
     void flipY();
     void destruirBala();
+    bool isFlipedY = false;
 };
 
 #endif // BALA_H

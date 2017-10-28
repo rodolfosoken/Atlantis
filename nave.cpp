@@ -219,8 +219,8 @@ void Nave:: criaNave(int dirNave){
             transladarModel(-0.87,0.5);
             break;
         case DIREITA:
+            transladarModel(0.87,0.8);
             flipY();
-            transladarModel(-0.87,0.8);
             break;
         case CENTRO:
             transladarModel(-0.87,0.3);
@@ -231,9 +231,6 @@ void Nave:: criaNave(int dirNave){
         createVBOs () ;
         createShaders () ;
     }
-
-
-
     drawNave();
 
 }
@@ -245,7 +242,7 @@ void Nave::moveNave(){
         transladarModel(0.01,0);
         break;
     case DIREITA:
-        transladarModel(0.01,0);
+        transladarModel(-0.01,0);
         break;
     case CENTRO:
         transladarModel(0.1,0);
@@ -254,13 +251,18 @@ void Nave::moveNave(){
 }
 
 void Nave::transladarModel(float dx,float dy){
-    modelMatrix.translate(dx,dy,0);
+    //qDebug("posX: %f",this->posX);
+    if(isFlipedY)
+        modelMatrix.translate(-dx,dy,0);
+    else
+        modelMatrix.translate(dx,dy,0);
     posX += dx;
     posY += dy;
+
 }
 
 void Nave::flipY(){
     modelMatrix.rotate(180,0,1,0);
-    posX = -posX;
+    isFlipedY = !isFlipedY;
 
 }

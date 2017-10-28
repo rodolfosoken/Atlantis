@@ -21,17 +21,6 @@ void OpenGLWidget :: initializeGL ()
     timerGerador . start (std::rand()%5000+500) ;
     //timerGerador . start (3000) ;
 
-}
-
-void OpenGLWidget :: resizeGL (int w , int h )
-{
-    glViewport (0 ,0 ,w , h ) ;
-}
-void OpenGLWidget :: paintGL ()
-{
-
-    glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) ;
-
 
     //Cria cenario se nao foi criado ainda
     if(!(modelTerra && modelAgua)){
@@ -51,8 +40,20 @@ void OpenGLWidget :: paintGL ()
         modelCanhaoCent->criaCanhao(CANHAOCENT);
     }
 
+}
+
+void OpenGLWidget :: resizeGL (int w , int h )
+{
+    glViewport (0 ,0 ,w , h ) ;
+}
+void OpenGLWidget :: paintGL ()
+{
+
+    glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) ;
+
     //atualizacao das balas primeiro, ver colisao com naves
-    if(!listBalas.empty()){
+    qDebug("listBala.size(): %d", listBalas.size() );
+    if(listBalas.size()>0){
         foreach (std::shared_ptr <Bala> modelBala, listBalas) {
             modelBala->moveBala();
             modelBala->drawBala();
@@ -60,7 +61,9 @@ void OpenGLWidget :: paintGL ()
             //verifica colisao com as naves
 
             foreach (std::shared_ptr <Nave> nave, listNaves) {
+
                 if((std::abs(nave->posY - modelBala->posY) < 0.09)&& std::abs(nave->posX - modelBala->posX)<0.09){
+                   qDebug("colisao");
                     nave->destruirNave();
                     nave->drawNave();
                     listNaves.remove(nave);
@@ -82,7 +85,7 @@ void OpenGLWidget :: paintGL ()
             }
 
             //verifica se a bala ja esta fora da tela para remove la
-            if(modelBala->posX > 1.5 || modelBala->posX < -1.5){
+            if(modelBala->posX > 1.1 || modelBala->posX < -1.1 || modelBala->posY > 1.1){
                 modelBala->destruirBala();
                 modelBala->drawBala();
                 listBalas.remove(modelBala);
@@ -98,7 +101,7 @@ void OpenGLWidget :: paintGL ()
             modelNave->drawNave();
 
             //verifica se a nave ja saiu da tela, entao apagar
-            if(modelNave->posX > 1.5 || modelNave->posX < -1.5){
+            if(modelNave->posX > 1.1 || modelNave->posX < -1.1){
                 modelNave->destruirNave();
                 modelNave->drawNave();
                 listNaves.remove(modelNave);

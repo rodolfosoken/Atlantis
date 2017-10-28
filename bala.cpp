@@ -252,13 +252,17 @@ void Bala::moveBala(){
 }
 
 void Bala::transladarModel(float dx,float dy){
-    modelMatrix.translate(dx,dy,0);
+    //qDebug("posX: %f",this->posX);
+    if(isFlipedY)
+        modelMatrix.translate(-dx,dy,0);
+    else
+        modelMatrix.translate(dx,dy,0);
     posX += dx;
     posY += dy;
 }
 
 void Bala::flipY(){
     modelMatrix.rotate(180,0,1,0);
-    posX = -posX;
+    isFlipedY = !isFlipedY;
 
 }
